@@ -4,24 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 const Logo: React.FC<{ className?: string }> = ({ className = "w-12 h-12" }) => (
   <div className={`${className} relative flex items-center justify-center overflow-hidden rounded-full border-2 border-black bg-yellow-400 shadow-md`}>
-    <svg className="w-4/5 h-4/5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Simple Iconic Horse Head */}
-      <path 
-        d="M19 12.5C19 12.5 20.5 10 20.5 7.5C20.5 5 18.5 3.5 16 3.5C13.5 3.5 12 5.5 11.5 7C11 8.5 11 10.5 11 10.5L10 12.5L5 12.5L3.5 14.5L5 16.5H10.5L12 19.5H14L13.5 16.5L15.5 14.5L19 12.5Z" 
-        fill="white" 
-        className="hidden" 
-      />
-      {/* Refined Electric Horse Silhouette */}
-      <path 
-        d="M20,8c0-2.2-1.8-4-4-4c-1.5,0-2.8,0.8-3.5,2.1C12.3,5.4,12,5,11.5,4.7C11,4.4,10.3,4.3,9.7,4.6C8.8,5,8.4,6.2,8.8,7.3 c0.1,0.3,0.3,0.6,0.5,0.8L8.1,10.6C8,10.8,7.8,11,7.5,11H4c-0.6,0-1,0.4-1,1s0.4,1,1,1h2.5c0.3,0,0.5,0.2,0.6,0.4l0.7,1.4 c0.3,0.5,0.8,0.8,1.4,0.8h1.4l0.8,2.3c0.2,0.5,0.7,0.8,1.2,0.8h2c0.7,0,1.2-0.5,1.2-1.2l-0.2-1.5l1.6-1.6c0.3-0.3,0.5-0.7,0.5-1.1 l0-1l2.5-1.5C19.7,10.4,20,9.3,20,8z" 
-        fill="white" 
-      />
-      {/* Lightning Bolt cutout on the horse */}
-      <path 
-        d="M13,8.5l-2.5,3.5h1.5l-1,3l3-4h-1.5l1-2.5" 
-        fill="black" 
-      />
-    </svg>
+    <img src="/logo.png" alt="Pat Murphy Electrical Logo" className="w-full h-full object-cover" />
   </div>
 );
 
@@ -59,11 +42,10 @@ const Navbar: React.FC = () => {
               <Link
                 key={link.name}
                 to={link.path}
-                className={`text-sm font-black uppercase tracking-widest transition-colors duration-200 ${
-                  isActive(link.path)
+                className={`text-sm font-black uppercase tracking-widest transition-colors duration-200 ${isActive(link.path)
                     ? 'text-yellow-600 border-b-2 border-yellow-400'
                     : 'text-black hover:text-yellow-600'
-                }`}
+                  }`}
               >
                 {link.name}
               </Link>
@@ -101,11 +83,10 @@ const Navbar: React.FC = () => {
               key={link.name}
               to={link.path}
               onClick={() => setIsOpen(false)}
-              className={`block px-3 py-3 rounded-md text-base font-black uppercase tracking-widest ${
-                isActive(link.path)
+              className={`block px-3 py-3 rounded-md text-base font-black uppercase tracking-widest ${isActive(link.path)
                   ? 'text-yellow-600 bg-yellow-50'
                   : 'text-black hover:bg-slate-50'
-              }`}
+                }`}
             >
               {link.name}
             </Link>
