@@ -58,10 +58,7 @@ const Contact: React.FC = () => {
           "phone": formData.phone,
           "address": formData.address,
           "service required": formData.serviceType,
-          "message": formData.description,
-          "ai_summary": aiAnalysis ? aiAnalysis.summary : "Not requested",
-          "ai_urgency": aiAnalysis ? aiAnalysis.estimatedUrgency : "N/A",
-          "ai_recommendation": aiAnalysis ? aiAnalysis.recommendation : "N/A"
+          "message": formData.description
         })
       });
 
@@ -151,7 +148,6 @@ const Contact: React.FC = () => {
             <div className="bg-white rounded-3xl shadow-2xl border-4 border-black overflow-hidden">
               <div className="bg-black p-8 flex items-center justify-between">
                 <span className="text-white font-black uppercase tracking-widest">Free Quote Request</span>
-                <span className="bg-yellow-400 text-black px-4 py-1 rounded-full text-xs font-black uppercase">AI Check</span>
               </div>
 
               {isSuccess ? (
