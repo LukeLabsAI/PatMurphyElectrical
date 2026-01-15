@@ -32,7 +32,7 @@ const Services: React.FC = () => {
         'Scheduled Maintenance Audits',
         'Resort Maintenance'
       ],
-      image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800'
+      image: '/commercial.jpg'
     },
     {
       title: 'Industrial',
@@ -47,18 +47,18 @@ const Services: React.FC = () => {
         'Underground Cabling',
         'Design and Construct'
       ],
-      image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800'
+      image: '/industrial.jpg'
     }
   ];
 
   const fullList = [
-    "3 phase power", "Additions", "After-hours services", "Alterations", "Body corporate", "Carparks", 
+    "3 phase power", "Additions", "After-hours services", "Alterations", "Body corporate", "Carparks",
     "Ceiling fans", "Design and construct", "Electrical testing and verification", "Energex tariff metering",
-    "Energy-efficient solutions", "Exit and emergency lighting", "Fault locations and repairs", 
-    "Industrial buildings and maintenance", "LED lighting", "Lighting", "Medical equipment", 
-    "Money-saving solutions", "Motion detectors", "New homes", "New kitchens", "New switchboards", 
-    "Offices", "Pump and electric motors", "Real estate maintenance services", "Renovations", 
-    "Resort maintenance", "Retail", "Rewires", "Safety switches", "Security lighting", "Smoke alarms", 
+    "Energy-efficient solutions", "Exit and emergency lighting", "Fault locations and repairs",
+    "Industrial buildings and maintenance", "LED lighting", "Lighting", "Medical equipment",
+    "Money-saving solutions", "Motion detectors", "New homes", "New kitchens", "New switchboards",
+    "Offices", "Pump and electric motors", "Real estate maintenance services", "Renovations",
+    "Resort maintenance", "Retail", "Rewires", "Safety switches", "Security lighting", "Smoke alarms",
     "Sports floodlighting", "Stove and hot water repairs", "Underground cabling", "Workplace test and tag"
   ];
 
@@ -69,7 +69,7 @@ const Services: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 text-center">
           <h1 className="text-5xl md:text-6xl font-black mb-6 uppercase tracking-tighter">High-Quality Services</h1>
           <p className="max-w-3xl mx-auto text-slate-400 text-lg font-medium leading-relaxed">
-            We provide a full range of electrical services for residential, commercial and industrial properties across the Sunshine Coast. 
+            We provide a full range of electrical services for residential, commercial and industrial properties across the Sunshine Coast.
             <span className="block mt-4 text-yellow-400 font-black uppercase tracking-widest">ON-SITE INSPECTIONS AND FREE QUOTES.</span>
           </p>
         </div>
@@ -93,12 +93,12 @@ const Services: React.FC = () => {
                   ))}
                 </div>
                 <div className="mt-12">
-                  <Link 
-                    to="/contact" 
+                  <Link
+                    to="/contact"
                     className="inline-flex items-center space-x-2 bg-black text-white px-8 py-4 rounded-xl font-black uppercase tracking-widest text-sm hover:bg-slate-800 transition-all shadow-lg"
                   >
                     <span>Request Quote</span>
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                   </Link>
                 </div>
               </div>
@@ -123,7 +123,7 @@ const Services: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {fullList.map((service, i) => (
               <div key={i} className="flex items-center space-x-3 p-4 bg-white/5 border border-white/10 rounded-xl">
-                <svg className="w-5 h-5 text-yellow-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>
+                <svg className="w-5 h-5 text-yellow-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
                 <span className="text-xs font-black uppercase tracking-widest text-slate-100">{service}</span>
               </div>
             ))}
