@@ -20,7 +20,13 @@ const Contact: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    // Map external form field names back to internal state
+    let stateKey = name;
+    if (name === 'full name') stateKey = 'name';
+    if (name === 'service required') stateKey = 'serviceType';
+    if (name === 'message') stateKey = 'description';
+
+    setFormData(prev => ({ ...prev, [stateKey]: value }));
   };
 
   const handleAiAnalyze = async () => {
@@ -41,21 +47,38 @@ const Contact: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log("Submitting Quote Request:", {
-        ...formData,
-        aiEnhancement: aiAnalysis
+      const response = await fetch("https://formspree.io/f/mojjvnel", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          "full name": formData.name,
+          "email": formData.email,
+          "phone": formData.phone,
+          "address": formData.address,
+          "service required": formData.serviceType,
+          "message": formData.description,
+          "ai_summary": aiAnalysis ? aiAnalysis.summary : "Not requested",
+          "ai_urgency": aiAnalysis ? aiAnalysis.estimatedUrgency : "N/A",
+          "ai_recommendation": aiAnalysis ? aiAnalysis.recommendation : "N/A"
+        })
       });
-      setIsSuccess(true);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        address: '',
-        serviceType: 'Residential',
-        description: ''
-      });
-      setAiAnalysis(null);
+
+      if (response.ok) {
+        setIsSuccess(true);
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          address: '',
+          serviceType: 'Residential',
+          description: ''
+        });
+        setAiAnalysis(null);
+      } else {
+        throw new Error("Form submission failed");
+      }
     } catch (err) {
       alert("Something went wrong. Please try again or call us.");
     } finally {
@@ -76,7 +99,7 @@ const Contact: React.FC = () => {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-            
+
             {/* Contact Details Column */}
             <div className="space-y-12">
               <div>
@@ -84,7 +107,7 @@ const Contact: React.FC = () => {
                 <div className="space-y-10">
                   <div className="flex items-start space-x-6">
                     <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center flex-shrink-0 border-2 border-yellow-400 shadow-xl">
-                      <svg className="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                      <svg className="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                     </div>
                     <div>
                       <h4 className="font-black text-slate-500 uppercase text-xs tracking-widest mb-1">Direct Lines</h4>
@@ -94,7 +117,7 @@ const Contact: React.FC = () => {
                   </div>
                   <div className="flex items-start space-x-6">
                     <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center flex-shrink-0 border-2 border-yellow-400 shadow-xl">
-                      <svg className="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                      <svg className="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     </div>
                     <div>
                       <h4 className="font-black text-slate-500 uppercase text-xs tracking-widest mb-1">Business Hours</h4>
@@ -104,7 +127,7 @@ const Contact: React.FC = () => {
                   </div>
                   <div className="flex items-start space-x-6">
                     <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center flex-shrink-0 border-2 border-yellow-400 shadow-xl">
-                      <svg className="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                      <svg className="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                     </div>
                     <div>
                       <h4 className="font-black text-slate-500 uppercase text-xs tracking-widest mb-1">Address</h4>
@@ -116,7 +139,7 @@ const Contact: React.FC = () => {
 
               <div className="bg-yellow-400 rounded-3xl p-10 text-black shadow-2xl relative overflow-hidden group border-4 border-black">
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
-                   <svg className="w-32 h-32" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                  <svg className="w-32 h-32" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                 </div>
                 <h3 className="text-3xl font-black mb-6 uppercase tracking-tighter">24/7 Emergency</h3>
                 <p className="mb-10 font-bold leading-relaxed text-lg">Electrical emergency? Our rapid response team is on call 24 hours a day to keep your family and business safe.</p>
@@ -130,22 +153,22 @@ const Contact: React.FC = () => {
                 <span className="text-white font-black uppercase tracking-widest">Free Quote Request</span>
                 <span className="bg-yellow-400 text-black px-4 py-1 rounded-full text-xs font-black uppercase">AI Check</span>
               </div>
-              
+
               {isSuccess ? (
                 <div className="p-12 text-center animate-in zoom-in duration-500">
                   <div className="w-24 h-24 bg-yellow-400 rounded-full flex items-center justify-center mx-auto mb-8 border-4 border-black">
-                    <svg className="w-12 h-12 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7"/></svg>
+                    <svg className="w-12 h-12 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" /></svg>
                   </div>
                   <h2 className="text-4xl font-black mb-6 uppercase tracking-tighter">Request Sent</h2>
                   <p className="text-slate-900 mb-10 font-bold text-lg leading-relaxed">Thanks for reaching out. We will contact you shortly to arrange your free inspection.</p>
                   <button onClick={() => setIsSuccess(false)} className="bg-black text-white px-12 py-5 rounded-xl font-black uppercase tracking-widest">New Request</button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="p-10 space-y-8">
+                <form onSubmit={handleSubmit} method="POST" className="p-10 space-y-8">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                     <div>
                       <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-3">Your Name</label>
-                      <input type="text" required name="name" value={formData.name} onChange={handleChange} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-5 py-4 focus:border-yellow-400 outline-none transition-all font-bold" placeholder="Full name" />
+                      <input type="text" required name="full name" value={formData.name} onChange={handleChange} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-5 py-4 focus:border-yellow-400 outline-none transition-all font-bold" placeholder="Full name" />
                     </div>
                     <div>
                       <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-3">Phone</label>
@@ -160,11 +183,11 @@ const Contact: React.FC = () => {
                     </div>
                     <div>
                       <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-3">Property Type</label>
-                      <select name="serviceType" value={formData.serviceType} onChange={handleChange} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-5 py-4 focus:border-yellow-400 outline-none transition-all font-black uppercase tracking-widest text-sm">
-                        <option>Residential</option>
-                        <option>Commercial</option>
-                        <option>Industrial</option>
-                        <option>Other / Emergency</option>
+                      <select name="service required" value={formData.serviceType} onChange={handleChange} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-5 py-4 focus:border-yellow-400 outline-none transition-all font-black uppercase tracking-widest text-sm">
+                        <option value="Residential">Residential</option>
+                        <option value="Commercial">Commercial</option>
+                        <option value="Industrial">Industrial</option>
+                        <option value="Other / Emergency">Other / Emergency</option>
                       </select>
                     </div>
                   </div>
@@ -178,11 +201,11 @@ const Contact: React.FC = () => {
                     <div className="flex justify-between items-center mb-3">
                       <label className="block text-xs font-black text-slate-500 uppercase tracking-widest">Work Required</label>
                       <button type="button" onClick={handleAiAnalyze} disabled={isAnalyzing || formData.description.length < 10} className="text-[10px] font-black text-yellow-600 hover:text-yellow-700 disabled:opacity-30 flex items-center space-x-1 uppercase tracking-widest">
-                        <svg className={`w-3 h-3 ${isAnalyzing ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a2 2 0 00-1.96 1.414l-.726 2.18a2 2 0 001.177 2.455l.944.377a2 2 0 002.454-1.178l.727-2.179a2 2 0 00-1.207-2.445z"/></svg>
+                        <svg className={`w-3 h-3 ${isAnalyzing ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a2 2 0 00-1.96 1.414l-.726 2.18a2 2 0 001.177 2.455l.944.377a2 2 0 002.454-1.178l.727-2.179a2 2 0 00-1.207-2.445z" /></svg>
                         <span>{isAnalyzing ? 'Analyzing...' : 'Technical Review'}</span>
                       </button>
                     </div>
-                    <textarea required name="description" value={formData.description} onChange={handleChange} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-5 py-4 focus:border-yellow-400 outline-none transition-all h-40 resize-none font-bold" placeholder="Please provide details of what you need help with..."></textarea>
+                    <textarea required name="message" value={formData.description} onChange={handleChange} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-5 py-4 focus:border-yellow-400 outline-none transition-all h-40 resize-none font-bold" placeholder="Please provide details of what you need help with..."></textarea>
                   </div>
 
                   {aiAnalysis && (
